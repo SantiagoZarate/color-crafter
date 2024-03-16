@@ -3,10 +3,13 @@ import { getTopPredominantColors } from "@util/extract_colors";
 import { PreviewImage } from "./types";
 import { useState } from "react";
 import { HoverText } from "./components/hovertext/HoverText";
+import { useToast } from "./components/ui/use-toast";
+import { Toaster } from "./components/ui/toaster";
 
 export default function App() {
   const [predominentColors, setPredominentColors] = useState<string[]>([]);
   const [previewImage, setPreviewImage] = useState<PreviewImage | null>(null);
+  const { toast } = useToast();
 
   const changePreview = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files![0];
@@ -22,13 +25,25 @@ export default function App() {
     if (!previewImage) return;
 
     getTopPredominantColors(previewImage.image).then((res) => {
-      console.log(res);
       setPredominentColors(res);
     });
   };
 
   const deletePreviewImage = () => {
     setPreviewImage(null);
+  };
+
+  const copyToClipboard = (text: string) => {
+    toast({
+      title: "Color copied to your clipboard",
+      description: text,
+    });
+    navigator.clipboard
+      .writeText(text)
+      .then((_res) => {})
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (
@@ -102,19 +117,19 @@ export default function App() {
         </section>
         <section className="flex-1 h-full flex flex-col gap-2 justify-center bg-stone-900">
           {predominentColors && (
-            <ul className="flex justify-between gap-2 py-8 px-20">
+            <ul className="flex justify-between gap-2 p-8">
               {predominentColors.map((color) => (
-                <HoverText hover={color}>
+                <HoverText key={color} hover={color}>
                   <li
-                    key={color}
-                    className="hover:-translate-y-1 duration-150 transition size-12 rounded-lg shadow-lg"
+                    onClick={() => copyToClipboard(color)}
+                    className="hover:-translate-y-1 duration-150 transition size-12 rounded-lg shadow-lg active:translate-y-1"
                     style={{ backgroundColor: color }}
                   ></li>
+                  <Toaster />
                 </HoverText>
               ))}
             </ul>
           )}
-          i should display the colors here
         </section>
       </main>
     </div>
