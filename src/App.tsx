@@ -1,6 +1,6 @@
-import { InformationIcon, PictureIcon, XIcon } from "./components/iconst";
+import { InformationIcon, PictureIcon, XIcon } from "@icon";
+import { getTopPredominantColors } from "@util/extract_colors";
 import { PreviewImage } from "./types";
-import { getTopPredominantColors } from "./utils/extract_colors";
 import { useState } from "react";
 
 export default function App() {
