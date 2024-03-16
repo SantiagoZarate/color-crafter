@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      "@": path.resolve("src/"),
       "@icon": path.resolve("src/components/icons/index.tsx"),
       "@util": path.resolve("src/utils"),
       "@component": path.resolve("src/components"),

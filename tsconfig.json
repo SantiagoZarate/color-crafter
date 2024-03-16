@@ -23,6 +23,7 @@
     /* Alias */
     "baseUrl": ".",
     "paths": {
+      "@/*": ["src/*"],
       "@icon": ["src/components/icons/index.tsx"],
       "@util/*": ["src/utils/*"],
       "@component/*": ["src/components/*"],

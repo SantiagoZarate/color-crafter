@@ -2,6 +2,7 @@ import { InformationIcon, PictureIcon, XIcon } from "@icon";
 import { getTopPredominantColors } from "@util/extract_colors";
 import { PreviewImage } from "./types";
 import { useState } from "react";
+import { HoverText } from "./components/hovertext/HoverText";
 
 export default function App() {
   const [predominentColors, setPredominentColors] = useState<string[]>([]);
@@ -99,14 +100,17 @@ export default function App() {
             </button>
           </form>
         </section>
-        <section className="flex-1 flex justify-center bg-stone-900">
+        <section className="flex-1 h-full flex flex-col gap-2 justify-center bg-stone-900">
           {predominentColors && (
-            <ul className="flex gap-2">
+            <ul className="flex justify-between gap-2 py-8 px-20">
               {predominentColors.map((color) => (
-                <li
-                  key={color}
-                  className={`size-12 rounded-lg bg-[${color}]`}
-                ></li>
+                <HoverText hover={color}>
+                  <li
+                    key={color}
+                    className="hover:-translate-y-1 duration-150 transition size-12 rounded-lg shadow-lg"
+                    style={{ backgroundColor: color }}
+                  ></li>
+                </HoverText>
               ))}
             </ul>
           )}

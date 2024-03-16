@@ -51,8 +51,7 @@ export function getTopPredominantColors(file: File): Promise<string[]> {
 
         // Get top 5 colors
         const topColors = sortedColors.slice(0, 5).map(([color]) => color);
-        const colorsWithoutSpaces = removeSpaces(topColors);
-        resolve(colorsWithoutSpaces);
+        resolve(topColors);
       };
 
       // Handle image loading errors
@@ -65,8 +64,8 @@ export function getTopPredominantColors(file: File): Promise<string[]> {
   });
 }
 
-function removeSpaces(arr: string[]) {
-  const result: string[] = [];
-  arr.forEach((string) => result.push(string.replace(/\s/g, "")));
-  return result;
-}
+// function removeSpaces(arr: string[]) {
+//   const result: string[] = [];
+//   arr.forEach((string) => result.push(string.replace(/\s/g, "")));
+//   return result;
+// }
