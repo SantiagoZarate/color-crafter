@@ -1,58 +1,63 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { InformationIcon, PictureIcon } from "./components/iconst";
+import { InformationIcon, PictureIcon, XIcon } from "./components/iconst";
+import { PreviewImage } from "./types";
 import { getTopPredominantColors } from "./utils/extract_colors";
-import { FormType, formSchema } from "./utils/formSchema";
 import { useState } from "react";
 
 export default function App() {
   const [predominentColors, setPredominentColors] = useState<string[]>([]);
-  const [previewImage, setPreviewImage] = useState<string>("");
-  const {
-    handleSubmit,
-    register,
-    getFieldState,
-    reset,
-    getValues,
-    formState: { errors },
-  } = useForm<FormType>({
-    resolver: zodResolver(formSchema),
-  });
-
-  const uploadImage = (data: FormType) => {
-    getTopPredominantColors(data.image).then((res) => {
-      console.log(res);
-      setPredominentColors(res);
-    });
-    reset();
-  };
+  const [previewImage, setPreviewImage] = useState<PreviewImage | null>(null);
 
   const changePreview = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files![0];
     const urlImage = URL.createObjectURL(file);
-    console.log(file);
-    console.log(urlImage);
-    setPreviewImage(urlImage);
+    setPreviewImage({
+      image: file,
+      previewURLImage: urlImage,
+    });
+  };
+
+  const handleGetColors = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!previewImage) return;
+
+    getTopPredominantColors(previewImage.image).then((res) => {
+      console.log(res);
+      setPredominentColors(res);
+    });
+  };
+
+  const deletePreviewImage = () => {
+    setPreviewImage(null);
   };
 
   return (
     <div className=" bg-stone-950 text-stone-200">
       <main className="w-full h-full min-h-screen flex gap-2 items-center max-w-screen-xl mx-auto">
-        <section className="flex-1 flex justify-center p-8">
+        <section className="flex-1 flex p-8">
           <form
-            onSubmit={handleSubmit(uploadImage)}
+            onSubmit={handleGetColors}
             action=""
             method="POST"
-            className="flex flex-col items-center gap-8"
+            className="flex flex-col w-full items-center gap-8"
           >
-            <picture className="w-full rounded-xl min-h-40 max-h-40 flex items-center justify-center border bg-stone-900 border-stone-800 text-stone-700 overflow-hidden">
+            <picture className="relative w-full rounded-xl min-h-72 max-h-72 flex items-center justify-center border bg-stone-900 border-stone-800 text-stone-700">
               {previewImage ? (
-                <img
-                  draggable={false}
-                  className="w-full h-full object-cover"
-                  src={previewImage}
-                  alt=""
-                />
+                <>
+                  <img
+                    draggable={false}
+                    className="w-full h-full object-cover rounded-xl"
+                    src={previewImage.previewURLImage}
+                    alt=""
+                  />
+                  <button
+                    onClick={deletePreviewImage}
+                    className="absolute p-1 rounded-full bg-stone-600 -top-2 -right-2 border border-stone-700 hover:bg-stone-700 duration-150 hover:-translate-y-1 transition"
+                  >
+                    <div className="text-stone-300">
+                      <XIcon />
+                    </div>
+                  </button>
+                </>
               ) : (
                 <div className="capitalize flex flex-col items-center justify-center gap-2 py-4">
                   <PictureIcon />
@@ -84,20 +89,14 @@ export default function App() {
               </div>
             </div>
             <button
-              disabled={getFieldState("image").invalid}
               className={`px-4 py-2 text-sm uppercase rounded-full w-fit  text-emerald-500 font-bold ${
-                getFieldState("image").invalid
+                !previewImage?.previewURLImage
                   ? "bg-stone-700"
                   : "bg-emerald-200"
               }`}
             >
               Get colors!
             </button>
-            {errors.image && (
-              <p className="text-red-300 text-xs text-center capitalize">
-                {errors.image.message}
-              </p>
-            )}
           </form>
         </section>
         <section className="flex-1 flex justify-center bg-stone-900">
