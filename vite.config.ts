@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve("src/"),
+      "@shadcn": path.resolve("src/components/ui/index.ts"),
       "@icon": path.resolve("src/components/icons/index.tsx"),
       "@util": path.resolve("src/utils"),
       "@component": path.resolve("src/components"),

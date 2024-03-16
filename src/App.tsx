@@ -1,10 +1,9 @@
 import { InformationIcon, PictureIcon, XIcon } from "@icon";
 import { getTopPredominantColors } from "@util/extract_colors";
+import { HoverText } from "@component/hovertext";
+import { useToast, Toaster } from "@shadcn";
 import { PreviewImage } from "./types";
 import { useState } from "react";
-import { HoverText } from "./components/hovertext/HoverText";
-import { useToast } from "./components/ui/use-toast";
-import { Toaster } from "./components/ui/toaster";
 
 export default function App() {
   const [predominentColors, setPredominentColors] = useState<string[]>([]);
