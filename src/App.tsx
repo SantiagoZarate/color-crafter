@@ -67,7 +67,7 @@ export default function App() {
   return (
     <div className="bg-stone-950 text-stone-200">
       <img
-        className="absolute w-full object-cover hue-rotate-90 pointer-events-none"
+        className="absolute w-full object-cover pointer-events-none animate-rotate-hue rotate-180 bottom-0"
         src="/images/light.avif"
         alt=""
       />
@@ -138,7 +138,7 @@ export default function App() {
             </button>
           </form>
         </section>
-        <section className="flex-1 h-full flex flex-col gap-8 justify-center bg-stone-900/50 backdrop-blur-md p-8 z-10">
+        <section className="flex-1 h-full flex flex-col gap-8 justify-center bg-stone-900/30 backdrop-blur-md p-8 z-10 shadow-md">
           {predominentColors && (
             <ul className="flex justify-center gap-8 items-center">
               {predominentColors.map((color) => (
