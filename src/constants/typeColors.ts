@@ -1,1 +1,2 @@
-export const typeColors = ["RGBA", "HEXA", "HSLA"];
+export const colorFormat = ["RGBA", "HEXA", "HSLA"] as const;
+export type ColorFormat = (typeof colorFormat)[number];

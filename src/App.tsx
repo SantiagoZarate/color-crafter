@@ -3,10 +3,16 @@ import { getTopPredominantColors } from "@util/extract_colors";
 import { HoverText } from "@component/hovertext";
 import { useToast, Toaster } from "@shadcn";
 import { PreviewImage } from "./types";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { ColorFormat, colorFormat } from "./constants/typeColors";
+import { rgbaToHex } from "./utils/rgba_to_hex";
+import { rgbaToHsla } from "./utils/rgba_to_hsla";
 
 export default function App() {
   const [predominentColors, setPredominentColors] = useState<string[]>([]);
+  const initialColorValues = useRef<string[]>([]);
+  const [currentColorFormat, setCurrentColorFormat] =
+    useState<ColorFormat>("RGBA");
   const [previewImage, setPreviewImage] = useState<PreviewImage | null>(null);
   const { toast } = useToast();
 
@@ -25,6 +31,7 @@ export default function App() {
 
     getTopPredominantColors(previewImage.image).then((res) => {
       setPredominentColors(res);
+      initialColorValues.current = res;
     });
   };
 
@@ -45,8 +52,25 @@ export default function App() {
       });
   };
 
+  const changeToHex = (type: ColorFormat) => {
+    if (!predominentColors || type === currentColorFormat) return;
+
+    let newFormat;
+    if (type === "HEXA") newFormat = rgbaToHex(initialColorValues.current);
+    if (type === "HSLA") newFormat = rgbaToHsla(initialColorValues.current);
+    if (type === "RGBA") newFormat = initialColorValues.current;
+
+    setCurrentColorFormat(type);
+    setPredominentColors(newFormat!);
+  };
+
   return (
-    <div className=" bg-stone-950 text-stone-200">
+    <div className="bg-stone-950 text-stone-200">
+      <img
+        className="absolute w-full object-cover hue-rotate-90 pointer-events-none"
+        src="/images/light.avif"
+        alt=""
+      />
       <main className="w-full h-full min-h-screen flex gap-2 items-center max-w-screen-xl mx-auto">
         <section className="flex-1 flex p-8">
           <form
@@ -92,7 +116,6 @@ export default function App() {
               accept="image/*"
               type="file"
               hidden
-              // {...register("image")}
             />
             <div className="text-xs flex items-center capitalize gap-2 text-stone-700 divide-x divide-stone-700">
               <div>
@@ -104,19 +127,20 @@ export default function App() {
               </div>
             </div>
             <button
-              className={`px-4 py-2 text-sm uppercase rounded-full w-fit  text-emerald-500 font-bold ${
+              disabled={previewImage === null}
+              className={`px-4 py-2 text-sm uppercase rounded-full w-fit   font-bold ${
                 !previewImage?.previewURLImage
-                  ? "bg-stone-700"
-                  : "bg-emerald-200"
+                  ? "bg-stone-700 text-stone-400"
+                  : "bg-emerald-200 text-emerald-500"
               }`}
             >
               Get colors!
             </button>
           </form>
         </section>
-        <section className="flex-1 h-full flex flex-col gap-2 justify-center bg-stone-900">
+        <section className="flex-1 h-full flex flex-col gap-8 justify-center bg-stone-900/50 backdrop-blur-md p-8 z-10">
           {predominentColors && (
-            <ul className="flex justify-between gap-2 p-8">
+            <ul className="flex justify-center gap-8 items-center">
               {predominentColors.map((color) => (
                 <HoverText key={color} hover={color}>
                   <li
@@ -124,11 +148,36 @@ export default function App() {
                     className="hover:-translate-y-1 duration-150 transition size-12 rounded-lg shadow-lg active:translate-y-1"
                     style={{ backgroundColor: color }}
                   ></li>
-                  <Toaster />
                 </HoverText>
               ))}
+              <Toaster />
             </ul>
           )}
+          <article className="flex flex-col gap-4 bg-stone-950 p-4 rounded-lg">
+            <ul className="flex flex-col gap-1">
+              {predominentColors.map((color, index) => (
+                <li key={color} className="flex gap-2 text-stone-300 font-mono">
+                  <p>--color_{index + 1}:</p>
+                  {color}
+                </li>
+              ))}
+            </ul>
+            <footer className="flex justify-between gap-4">
+              <article className="flex gap-4">
+                {colorFormat.map((type) => (
+                  <button
+                    onClick={() => changeToHex(type)}
+                    className={`px-3 py-2 rounded-lg border border-stone-700 ${
+                      currentColorFormat === type && "bg-stone-800"
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </article>
+              <button>copy!</button>
+            </footer>
+          </article>
         </section>
       </main>
     </div>
