@@ -36,7 +36,7 @@ export function rgbaToHsla(rgbaColors: string[]): string[] {
     s = Math.round(s * 100); // Convert to percentage
 
     // Construct HSLA string
-    const hslaColor = `hsla(${h}, ${s}%, ${l * 100}%, ${a})`;
+    const hslaColor = `hsla(${h}, ${s}%, ${Math.floor(l * 100)}%, ${a})`;
 
     return hslaColor;
   });
