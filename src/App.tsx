@@ -71,7 +71,7 @@ export default function App() {
         src="/images/light.avif"
         alt=""
       />
-      <main className="w-full h-full min-h-screen flex gap-2 items-center max-w-screen-xl mx-auto">
+      <main className="w-full h-full min-h-screen md:flex-row items-center flex-col flex gap-2  max-w-screen-xl mx-auto">
         <section className="flex-1 flex p-8">
           <form
             onSubmit={handleGetColors}

@@ -29,7 +29,9 @@
       "@util/*": ["src/utils/*"],
       "@component/*": ["src/components/*"],
       "@hook/*": ["src/hooks/*"]
-    }
+    },
+    /* Compile */
+    "outDir": "dir"
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
