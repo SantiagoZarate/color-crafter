@@ -1,2 +1,2 @@
-export * from "./imageColors/ImageColorsPage";
+export * from "./predominantColors/predominantColorsPage";
 export * from "./home/HomePage";

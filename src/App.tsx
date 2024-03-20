@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { ImageColorsPage } from "./pages";
+import { PredominantColorsPage } from "./pages";
 import { MainLayout } from "./layouts/MainLayout";
 import { HomePage } from "./pages/home/HomePage";
 import { ToolLayout } from "./layouts/ToolLayout";
@@ -10,8 +10,14 @@ export default function App() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route element={<ToolLayout />}>
-          <Route path="/predominant-colors" element={<ImageColorsPage />} />
-          <Route path="/tailwind-translate" element={<ImageColorsPage />} />
+          <Route
+            path="/predominant-colors"
+            element={<PredominantColorsPage />}
+          />
+          <Route
+            path="/tailwind-translate"
+            element={<PredominantColorsPage />}
+          />
         </Route>
       </Route>
     </Routes>

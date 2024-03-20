@@ -6,7 +6,7 @@ import { ColorFormat } from "@/constants/typeColors";
 import { rgbaToHex } from "@/utils/rgba_to_hex";
 import { rgbaToHsla } from "@/utils/rgba_to_hsla";
 
-export function ImageColorsPage() {
+export function PredominantColorsPage() {
   const [predominentColors, setPredominentColors] = useState<string[]>([]);
   const [colorFormat, setColorFormat] = useState<ColorFormat>("RGBA");
   const initialColorValues = useRef<string[]>([]);
