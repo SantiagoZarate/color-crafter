@@ -9,6 +9,7 @@ export function ToolLayout() {
       <nav className="flex gap-4">
         {tools.map((tool) => (
           <Link
+            key={tool.name}
             to={tool.url}
             className={`py-4 px-4 border-b capitalize duration-150 transition-colors ${
               tool.url === pathname ? "border-stone-200" : "border-stone-400"

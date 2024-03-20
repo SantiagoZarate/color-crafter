@@ -8,7 +8,8 @@ type ConvertToCSS = {
 };
 
 function convertToCSS(input: Colors): ConvertToCSS {
-  let cssProperties = "";
+  let cssColorVariables = "";
+  let cssColorOpositeMode = "";
   let twConfig = "";
 
   for (const key in input) {
@@ -19,7 +20,9 @@ function convertToCSS(input: Colors): ConvertToCSS {
       const [hue, saturation, lightness] = value.match(/\d+/g) || [];
 
       if (hue && saturation && lightness) {
-        cssProperties += `--${key}: ${hue}deg ${saturation}% ${lightness}%;\n      `;
+        const opositeLight = 100 - Number(lightness);
+        cssColorVariables += `--${key}: ${hue}deg ${saturation}% ${lightness}%;\n      `;
+        cssColorOpositeMode += `--${key}: ${hue}deg ${saturation}% ${opositeLight}%;\n      `;
       }
     }
   }
@@ -27,7 +30,11 @@ function convertToCSS(input: Colors): ConvertToCSS {
   const cssProps = `
   @layer base {
     :root {
-      ${cssProperties}
+      ${cssColorVariables}
+    }
+
+    [data-theme="dark"] {
+      ${cssColorOpositeMode}
     }
   }
 `;
@@ -44,6 +51,8 @@ function convertToCSS(input: Colors): ConvertToCSS {
 
 const myColors: Colors = {
   primary: "hsl(30deg,40%,50%)",
-  card: "rgb(240,404, 202)",
-  border: "hsl(30deg,40%,50%)",
+  secondary: "hsl(30deg,40%,10%)",
+  border: "hsl(30deg,40%,35%)",
 };
+
+console.log(convertToCSS(myColors).cssProps);

@@ -17,6 +17,7 @@ export function useExtractColors() {
     if (type === "HSLA") newFormat = rgbaToHsla(initialColorValues.current);
     if (type === "RGBA") newFormat = initialColorValues.current;
 
+    console.log(newFormat);
     setColorFormat(type);
     setPredominentColors(newFormat!);
   };
