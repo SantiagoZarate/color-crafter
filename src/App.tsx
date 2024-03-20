@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { PredominantColorsPage } from "./pages";
+import { PredominantColorsPage, TailwindTranslate } from "./pages";
 import { MainLayout } from "./layouts/MainLayout";
 import { HomePage } from "./pages/home/HomePage";
 import { ToolLayout } from "./layouts/ToolLayout";
@@ -14,10 +14,7 @@ export default function App() {
             path="/predominant-colors"
             element={<PredominantColorsPage />}
           />
-          <Route
-            path="/tailwind-translate"
-            element={<PredominantColorsPage />}
-          />
+          <Route path="/tailwind-translate" element={<TailwindTranslate />} />
         </Route>
       </Route>
     </Routes>

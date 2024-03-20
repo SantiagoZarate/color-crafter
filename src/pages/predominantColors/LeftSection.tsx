@@ -27,7 +27,7 @@ export function LeftSection({ onGetColors }: Props) {
   };
 
   return (
-    <section className="flex-1 flex py-8">
+    <section className="flex-1 flex">
       <form
         onSubmit={(e) => {
           e.preventDefault();
