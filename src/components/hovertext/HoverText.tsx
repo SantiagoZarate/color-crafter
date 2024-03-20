@@ -12,7 +12,7 @@ interface Props extends PropsWithChildren {
 
 export function HoverText({ hover, children }: Props) {
   return (
-    <TooltipProvider delayDuration={0}>
+    <TooltipProvider delayDuration={100}>
       <Tooltip>
         <TooltipTrigger>{children}</TooltipTrigger>
         <TooltipContent className="bg-stone-800 shadow-lg text-stone-300 border-none">
