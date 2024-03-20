@@ -5,7 +5,7 @@ export function ToolLayout() {
   const { pathname } = useLocation();
 
   return (
-    <div className="flex flex-col max-w-screen-xl mx-auto">
+    <div className="flex flex-col max-w-screen-xl mx-auto gap-8">
       <nav className="flex gap-4">
         {tools.map((tool) => (
           <Link
