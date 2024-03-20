@@ -1,4 +1,4 @@
-import { PlusIcon, XIcon } from "@/components/icons";
+import { EditIcon, PlusIcon, XIcon } from "@/components/icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,7 +11,9 @@ type Color = {
 
 const colorSchema = z.object({
   name: z.string().min(4, "name should at least have 5 letters"),
-  value: z.string(),
+  value: z
+    .string()
+    .refine((val) => val.startsWith("hsl"), "value must start with 'hsl'"),
 });
 
 type ColorProps = z.infer<typeof colorSchema>;
@@ -21,13 +23,25 @@ export function TailwindTranslate() {
     handleSubmit,
     register,
     formState: { errors },
+    setError,
   } = useForm<ColorProps>({
     resolver: zodResolver(colorSchema),
   });
   const [colors, setColors] = useState<Color[]>([]);
 
   const handleAddColor = (data: ColorProps) => {
+    if (colors.some((color) => color.name === data.name)) {
+      setError("name", { message: "Repeated name" });
+      return;
+    }
+
     setColors([...colors, data]);
+  };
+
+  const removeColor = (colorName: string) => {
+    setColors((prevStatus) =>
+      prevStatus.filter((color) => color.name !== colorName)
+    );
   };
 
   return (
@@ -77,7 +91,7 @@ export function TailwindTranslate() {
         </form>
         <ul className="flex flex-col divide-y divide-stone-700">
           {colors.map((color, i) => (
-            <li className="group flex gap-2 justify-between" key={i}>
+            <li className="group flex gap-2 justify-between" key={color.name}>
               <div className="flex items-center gap-4">
                 <span
                   className="size-28"
@@ -89,11 +103,14 @@ export function TailwindTranslate() {
                 </div>
               </div>
               <div className="flex flex-col divide-y">
-                <button className="group-hover:opacity-100 opacity-0 bg-zinc-800 flex-1 p-4 transition duration-150">
+                <button
+                  onClick={() => removeColor(color.name)}
+                  className="group-hover:opacity-100 opacity-0 bg-zinc-800 flex-1 p-4 transition duration-150"
+                >
                   <XIcon />
                 </button>
                 <button className="group-hover:opacity-100 opacity-0 bg-zinc-800 flex-1 p-4 transition duration-150">
-                  <XIcon />
+                  <EditIcon />
                 </button>
               </div>
             </li>
