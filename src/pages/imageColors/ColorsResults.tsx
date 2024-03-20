@@ -1,20 +1,18 @@
 import { HoverText } from "@/components/hovertext";
 import { Toaster, useToast } from "@/components/ui";
 import { ColorFormat, colorFormat } from "@/constants/typeColors";
-import { rgbaToHex } from "@/utils/rgba_to_hex";
-import { rgbaToHsla } from "@/utils/rgba_to_hsla";
-import { useRef, useState } from "react";
 
 interface Props {
   colors: string[];
-  // initColors: string[];
+  onChangeFormat: (type: ColorFormat) => void;
+  currentFormat: ColorFormat;
 }
 
-export function ColorsResults({ colors }: Props) {
-  const initialColorValues = useRef<string[]>(colors);
-  const [currentColorFormat, setCurrentColorFormat] =
-    useState<ColorFormat>("RGBA");
-
+export function ColorsResults({
+  colors,
+  onChangeFormat,
+  currentFormat,
+}: Props) {
   const { toast } = useToast();
 
   const copyToClipboard = (text: string) => {
@@ -28,18 +26,6 @@ export function ColorsResults({ colors }: Props) {
       .catch((e) => {
         console.log(e);
       });
-  };
-
-  const changeColorFormat = (type: ColorFormat) => {
-    if (!colors || type === currentColorFormat) return;
-
-    let newFormat;
-    if (type === "HEXA") newFormat = rgbaToHex(initialColorValues.current);
-    if (type === "HSLA") newFormat = rgbaToHsla(initialColorValues.current);
-    if (type === "RGBA") newFormat = initialColorValues.current;
-
-    setCurrentColorFormat(type);
-    // setPredominentColors(newFormat!);
   };
 
   return colors.length < 0 ? (
@@ -72,9 +58,9 @@ export function ColorsResults({ colors }: Props) {
           <article className="flex gap-4">
             {colorFormat.map((type) => (
               <button
-                onClick={() => changeColorFormat(type)}
+                onClick={() => onChangeFormat(type)}
                 className={`px-3 py-2 rounded-lg border border-stone-700 ${
-                  currentColorFormat === type && "bg-stone-800"
+                  currentFormat === type && "bg-stone-800"
                 }`}
               >
                 {type}
