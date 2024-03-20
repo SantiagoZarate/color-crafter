@@ -7,7 +7,7 @@ import { ImageUploader } from "./ImageUploader";
 import { Button } from "@/components/button";
 
 type Props = {
-  onGetColors: (event: React.FormEvent<HTMLFormElement>, image: File) => void;
+  onGetColors: (image: File) => void;
 };
 
 export function LeftSection({ onGetColors }: Props) {
@@ -29,7 +29,10 @@ export function LeftSection({ onGetColors }: Props) {
   return (
     <section className="flex-1 flex py-8">
       <form
-        onSubmit={(e) => onGetColors(e, previewImage?.image!)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onGetColors(previewImage?.image!);
+        }}
         action=""
         method="POST"
         className="flex flex-col w-full items-center gap-8"
