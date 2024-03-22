@@ -9,6 +9,7 @@ import {
   type TranslatedCssConfig,
   buildCssConfig,
 } from "@/utils/buildCssConfig";
+import { TabsType, tabs } from "@/constants/tabs";
 
 const colorSchema = z.object({
   name: z.string().min(4, "name should at least have 5 letters"),
@@ -31,7 +32,7 @@ export function TailwindTranslate() {
   const [colors, setColors] = useState<Color[]>([]);
   const [translatedConfigs, setTranslatedConfigs] =
     useState<TranslatedCssConfig | null>(null);
-
+  const [isFirstTab, setIsFirstTab] = useState<TabsType>("styles.css");
   const handleAddColor = (data: ColorProps) => {
     if (colors.some((color) => color.name === data.name)) {
       setError("name", { message: "Repeated name" });
@@ -52,8 +53,8 @@ export function TailwindTranslate() {
   };
 
   return (
-    <>
-      <div className=" w-full flex-1">
+    <section className="grid grid-cols-2 gap-8">
+      <div className="">
         <form
           onSubmit={handleSubmit(handleAddColor)}
           className="flex bg-zinc-900/50"
@@ -127,17 +128,36 @@ export function TailwindTranslate() {
           <Button onClick={handleTranslate}>translate</Button>
         )}
       </div>
-      <div className="bg-stone-900 p-4 rounded-lg w-full flex-1">
+      <div className="p-4 rounded-lg">
         {translatedConfigs ? (
           <article className="flex-1 flex flex-col">
-            <div className="flex-1">
+            <header className="flex justify-between items-center">
+              <nav className="flex divide-x">
+                {tabs.map((tab) => (
+                  <button
+                    onClick={() => {
+                      setIsFirstTab(tab);
+                    }}
+                    key={tab}
+                    className={` px-4 py-2 text-sm ${
+                      isFirstTab === tab
+                        ? "border-t bg-stone-800"
+                        : "bg-stone-900"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </nav>
+              <span>Tailwind translate</span>
+            </header>
+            <div className="flex-1 bg-stone-800 p-4">
               <pre>
-                <code>{translatedConfigs.cssProps}</code>
-              </pre>
-            </div>
-            <div className="flex-1">
-              <pre>
-                <code>{translatedConfigs.twProps}</code>
+                <code>
+                  {isFirstTab === "styles.css"
+                    ? translatedConfigs.cssProps
+                    : translatedConfigs.twProps}
+                </code>
               </pre>
             </div>
           </article>
@@ -145,6 +165,6 @@ export function TailwindTranslate() {
           <p>there is nun</p>
         )}
       </div>
-    </>
+    </section>
   );
 }

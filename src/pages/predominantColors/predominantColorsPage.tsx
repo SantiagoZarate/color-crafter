@@ -7,13 +7,13 @@ export function PredominantColorsPage() {
     useExtractColors();
 
   return (
-    <>
+    <section className="flex">
       <LeftSection onGetColors={extractColors} />
       <ColorsResults
         colors={predominentColors}
         currentFormat={colorFormat}
         onChangeFormat={changeColorFormat}
       />
-    </>
+    </section>
   );
 }
