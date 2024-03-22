@@ -3,11 +3,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
-
-type Color = {
-  name: string;
-  value: string;
-};
+import { Button } from "@/components/button";
+import {
+  type Color,
+  type TranslatedCssConfig,
+  buildCssConfig,
+} from "@/utils/buildCssConfig";
 
 const colorSchema = z.object({
   name: z.string().min(4, "name should at least have 5 letters"),
@@ -28,6 +29,8 @@ export function TailwindTranslate() {
     resolver: zodResolver(colorSchema),
   });
   const [colors, setColors] = useState<Color[]>([]);
+  const [translatedConfigs, setTranslatedConfigs] =
+    useState<TranslatedCssConfig | null>(null);
 
   const handleAddColor = (data: ColorProps) => {
     if (colors.some((color) => color.name === data.name)) {
@@ -42,6 +45,10 @@ export function TailwindTranslate() {
     setColors((prevStatus) =>
       prevStatus.filter((color) => color.name !== colorName)
     );
+  };
+
+  const handleTranslate = () => {
+    setTranslatedConfigs(buildCssConfig(colors));
   };
 
   return (
@@ -116,8 +123,28 @@ export function TailwindTranslate() {
             </li>
           ))}
         </ul>
+        {colors.length > 0 && (
+          <Button onClick={handleTranslate}>translate</Button>
+        )}
       </div>
-      <div className="bg-red-200 w-full flex-1"></div>
+      <div className="bg-stone-900 p-4 rounded-lg w-full flex-1">
+        {translatedConfigs ? (
+          <article className="flex-1 flex flex-col">
+            <div className="flex-1">
+              <pre>
+                <code>{translatedConfigs.cssProps}</code>
+              </pre>
+            </div>
+            <div className="flex-1">
+              <pre>
+                <code>{translatedConfigs.twProps}</code>
+              </pre>
+            </div>
+          </article>
+        ) : (
+          <p>there is nun</p>
+        )}
+      </div>
     </>
   );
 }

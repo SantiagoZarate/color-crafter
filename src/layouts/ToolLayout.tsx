@@ -19,7 +19,7 @@ export function ToolLayout() {
           </Link>
         ))}
       </nav>
-      <main className="w-full h-full md:flex-row items-center flex-col flex gap-8">
+      <main className="w-full h-full md:flex-row flex-col flex gap-8">
         <Outlet />
       </main>
     </div>
