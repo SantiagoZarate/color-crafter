@@ -1,31 +1,29 @@
-interface Colors {
-  [K: string]: string;
-}
-
-type ConvertToCSS = {
+export type TranslatedCssConfig = {
   twProps: string;
   cssProps: string;
 };
 
-function convertToCSS(input: Colors): ConvertToCSS {
+export type Color = {
+  name: string;
+  value: string;
+};
+
+export function buildCssConfig(input: Color[]): TranslatedCssConfig {
   let cssColorVariables = "";
   let cssColorOpositeMode = "";
   let twConfig = "";
 
-  for (const key in input) {
-    twConfig += `${key}: (hsl(var(--${key}))/ <alpha-value>),\n    `;
+  input.forEach(({ name, value }) => {
+    twConfig += `${name}: (hsl(var(--${name}))/ <alpha-value>),\n    `;
 
-    if (Object.prototype.hasOwnProperty.call(input, key)) {
-      const value = input[key];
-      const [hue, saturation, lightness] = value.match(/\d+/g) || [];
+    const [hue, saturation, lightness] = value.match(/\d+/g) || [];
 
-      if (hue && saturation && lightness) {
-        const opositeLight = 100 - Number(lightness);
-        cssColorVariables += `--${key}: ${hue}deg ${saturation}% ${lightness}%;\n      `;
-        cssColorOpositeMode += `--${key}: ${hue}deg ${saturation}% ${opositeLight}%;\n      `;
-      }
+    if (hue && saturation && lightness) {
+      const opositeLight = 100 - Number(lightness);
+      cssColorVariables += `--${name}: ${hue}deg ${saturation}% ${lightness}%;\n      `;
+      cssColorOpositeMode += `--${name}: ${hue}deg ${saturation}% ${opositeLight}%;\n      `;
     }
-  }
+  });
 
   const cssProps = `
   @layer base {
@@ -48,11 +46,3 @@ function convertToCSS(input: Colors): ConvertToCSS {
     cssProps,
   };
 }
-
-const myColors: Colors = {
-  primary: "hsl(30deg,40%,50%)",
-  secondary: "hsl(30deg,40%,10%)",
-  border: "hsl(30deg,40%,35%)",
-};
-
-console.log(convertToCSS(myColors).cssProps);
