@@ -25,8 +25,7 @@ export function buildCssConfig(input: Color[]): TranslatedCssConfig {
     }
   });
 
-  const cssProps = `
-  @layer base {
+  const cssProps = `@layer base {
     :root {
       ${cssColorVariables}
     }
@@ -36,8 +35,7 @@ export function buildCssConfig(input: Color[]): TranslatedCssConfig {
     }
   }
 `;
-  const twProps = `
-  colors {
+  const twProps = `colors {
     ${twConfig}
   }
 `;
