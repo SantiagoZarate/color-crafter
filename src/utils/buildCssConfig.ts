@@ -1,14 +1,6 @@
-export type TranslatedCssConfig = {
-  twProps: string;
-  cssProps: string;
-};
+import { Color, TranslatedCssConfig } from "@/types";
 
-export type Color = {
-  name: string;
-  value: string;
-};
-
-export function buildCssConfig(input: Color[]): TranslatedCssConfig {
+export function translateConfig(input: Color[]): TranslatedCssConfig {
   let cssColorVariables = "";
   let cssColorOpositeMode = "";
   let twConfig = "";
@@ -25,22 +17,28 @@ export function buildCssConfig(input: Color[]): TranslatedCssConfig {
     }
   });
 
-  const cssProps = `@layer base {
+  return {
+    twProps: buildTwConfig(twConfig),
+    cssProps: buildCssConfig(cssColorVariables, cssColorOpositeMode),
+  };
+}
+
+function buildTwConfig(config: string) {
+  return `colors {
+    ${config}
+  }
+`;
+}
+
+function buildCssConfig(normalTheme: string, darkTheme: string) {
+  return `@layer base {
     :root {
-      ${cssColorVariables}
+      ${normalTheme}
     }
 
     [data-theme="dark"] {
-      ${cssColorOpositeMode}
+      ${darkTheme}
     }
   }
 `;
-  const twProps = `colors {
-    ${twConfig}
-  }
-`;
-  return {
-    twProps,
-    cssProps,
-  };
 }

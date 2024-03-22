@@ -4,12 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 import { Button } from "@/components/button";
-import {
-  type Color,
-  type TranslatedCssConfig,
-  buildCssConfig,
-} from "@/utils/buildCssConfig";
+import { translateConfig } from "@/utils/buildCssConfig";
 import { TabsType, tabs } from "@/constants/tabs";
+import { Color, TranslatedCssConfig } from "@/types";
 
 const colorSchema = z.object({
   name: z.string().min(4, "name should at least have 5 letters"),
@@ -49,7 +46,7 @@ export function TailwindTranslate() {
   };
 
   const handleTranslate = () => {
-    setTranslatedConfigs(buildCssConfig(colors));
+    setTranslatedConfigs(translateConfig(colors));
   };
 
   return (
