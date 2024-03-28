@@ -2,9 +2,10 @@ import { Button } from "@/components/button";
 import { ColorProps, colorSchema } from "@/constants/colorSchema";
 import { Color } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon, XIcon, EditIcon } from "lucide-react";
+import { XIcon, EditIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { AddColorForm } from "./AddColorForm";
 
 type Props = {
   onTranslateColors: (colors: Color[]) => void;
@@ -38,46 +39,11 @@ export function ColorsDisplay({ onTranslateColors }: Props) {
 
   return (
     <div className="">
-      <form
+      <AddColorForm
+        errors={errors}
         onSubmit={handleSubmit(handleAddColor)}
-        className="flex bg-zinc-900/50"
-      >
-        <button className="size-28 flex items-center justify-center bg-zinc-900">
-          <PlusIcon />
-        </button>
-        <label
-          htmlFor=""
-          className="flex flex-col gap-2 text-xs flex-1 p-4 capitalize"
-        >
-          color name
-          <input
-            autoComplete="off"
-            type="text"
-            {...register("name")}
-            placeholder="primary"
-            className="text-sm px-2 py-1 rounded-md bg-zinc-900"
-          />
-          {errors.name ? (
-            <p className="text-red-300">{errors.name.message}</p>
-          ) : (
-            <p className="text-zinc-500">Make sure your name is cool enough</p>
-          )}
-        </label>
-        <label htmlFor="" className="flex flex-col gap-2 text-xs flex-1 p-4">
-          value
-          <input
-            type="text"
-            {...register("value")}
-            placeholder="hsl(20deg, 20%, 50%)"
-            className="text-sm px-2 py-1 rounded-md bg-zinc-900"
-          />
-          {errors.value ? (
-            <p className="text-red-300">{errors.value.message}</p>
-          ) : (
-            <p className="text-zinc-500">Only hsl values supported!</p>
-          )}
-        </label>
-      </form>
+        register={register}
+      />
       <ul className="flex flex-col divide-y divide-stone-700">
         {colors.map((color, i) => (
           <li className="group flex gap-2 justify-between" key={color.name}>

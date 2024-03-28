@@ -2,7 +2,7 @@ import { useState } from "react";
 import { translateConfig } from "@/utils/buildCssConfig";
 import { Color, TranslatedCssConfig } from "@/types";
 import { ConfigDisplay } from "./ConfigDisplay";
-import { ColorsDisplay } from "./ColorsDisplay";
+import { ColorsDisplay } from "./colorsDisplay/ColorsDisplay";
 
 export function TailwindTranslate() {
   const [translatedConfigs, setTranslatedConfigs] =
